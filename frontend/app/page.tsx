@@ -13,7 +13,29 @@ export default function Home() {
     new Date().toISOString().split("T")[0]
   );
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
+  const [isLoaded, setIsLoaded] = useState(false);
 
+  // 1. Load tasks from localStorage on initial render
+  useEffect(() => {
+    const savedTodos = localStorage.getItem("my_timed_tasks");
+    if (savedTodos) {
+      try {
+        setTodos(JSON.parse(savedTodos));
+      } catch (error) {
+        console.error("Failed to parse saved tasks:", error);
+      }
+    }
+    setIsLoaded(true);
+  }, []);
+
+  // 2. Save tasks to localStorage whenever `todos` state changes
+  useEffect(() => {
+    if (isLoaded) {
+      localStorage.setItem("my_timed_tasks", JSON.stringify(todos));
+    }
+  }, [todos, isLoaded]);
+
+  // Global Timer Interval
   useEffect(() => {
     const timer = setInterval(() => {
       setTodos((prevTodos) =>
@@ -88,15 +110,13 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-zinc-50 font-sans dark:bg-black py-12 px-6">
-      
-      {/* Side-by-side Flex Wrapper */}
       <div className="flex flex-col lg:flex-row items-start justify-center gap-6 w-full max-w-5xl">
         
         {/* Main Todo Container */}
         <main className="flex-1 w-full flex flex-col gap-6 rounded-2xl bg-white p-8 shadow-sm dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
           <div className="border-b border-zinc-200 dark:border-zinc-800 pb-4">
             <h1 className="font-display text-4xl font-normal tracking-tight text-black dark:text-zinc-50">
-              My Timed Tasks
+              My Tasks
             </h1>
           </div>
 
@@ -115,7 +135,9 @@ export default function Home() {
           <TodoForm onAddTodo={handleAddTodo} />
 
           <ul className="flex flex-col gap-2">
-            {filteredTodos.length === 0 ? (
+            {!isLoaded ? (
+              <li className="py-6 text-center text-sm text-zinc-400">Loading tasks...</li>
+            ) : filteredTodos.length === 0 ? (
               <li className="py-6 text-center text-sm text-zinc-500 dark:text-zinc-400">
                 No tasks for this date.
               </li>
