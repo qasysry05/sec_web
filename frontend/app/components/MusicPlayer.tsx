@@ -11,6 +11,7 @@ interface Track {
 const PLAYLIST: Track[] = [
   { title: "Lo-Fi 1", artist: "Local Audio", src: "/music/lofi1.mp3" },
   { title: "Lo-Fi 2", artist: "Local Audio", src: "/music/lofi2.mp3" },
+  { title: "Lo-Fi 3", artist: "Local Audio", src: "/music/lofi3.mp3" },
 ];
 
 export default function MusicPlayer() {
