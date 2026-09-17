@@ -6,6 +6,7 @@ import Calendar from "./components/Calendar";
 import TodoForm from "./components/TodoForm";
 import TodoItem from "./components/TodoItem";
 import MusicPlayer from "./components/MusicPlayer";
+import HourglassTimer from "./components/HourglassTimer"; // 1. Import the hourglass timer
 
 export default function Home() {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -155,8 +156,11 @@ export default function Home() {
           </ul>
         </main>
 
-        {/* Music Player Sidebar */}
-        <MusicPlayer />
+        {/* Right Sidebar: Music Player + Hourglass Timer */}
+        <div className="w-full lg:w-80 flex flex-col gap-6">
+          <MusicPlayer />
+          <HourglassTimer /> {/* 2. Rendered right below the music player */}
+        </div>
         
       </div>
     </div>
